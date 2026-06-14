@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 175 40" fill="none" role="img" aria-label="VeloxLab">
+  <defs>
+    <linearGradient id="g" x1="20" y1="34" x2="20" y2="4" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#1E40AF"/>
+      <stop offset="42%"  stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+  <!-- Mark -->
+  <path d="M20 34L2 4h9l6 19ZM20 34L38 4h-9l-6 19Z" fill="url(#g)"/>
+  <!-- Wordmark (white on dark) -->
+  <text x="51" y="29"
+    font-family="'Space Grotesk','Manrope',system-ui,sans-serif"
+    font-size="25"
+    letter-spacing="-0.4">
+    <tspan font-weight="700" fill="#FFFFFF">Velox</tspan><tspan font-weight="400" fill="rgba(255,255,255,0.72)">Lab</tspan>
+  </text>
+</svg>

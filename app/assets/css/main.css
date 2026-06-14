@@ -2,11 +2,12 @@
    VELOX LAB — Design Tokens (Timur's v3)
    ═══════════════════════════════════════ */
 :root {
-  /* Brand — indigo primary */
-  --accent:       #4F46E5;
-  --accent-deep:  #4338CA;
-  --accent-soft:  #EEF2FF;
-  --accent-l:     #818CF8;  /* light lavender for dark sections */
+  /* Brand — blue primary (from logo) */
+  --accent:       #2563EB;
+  --accent-deep:  #1D4ED8;
+  --accent-soft:  #EFF6FF;
+  --accent-l:     #60A5FA;  /* light blue for dark sections */
+  --accent-cyan:  #38BDF8;  /* logo tip colour */
 
   /* CTA — orange (hero form, main submit) */
   --cta:          #F97316;
@@ -15,26 +16,26 @@
 
   /* Light surfaces */
   --bg:           #FFFFFF;
-  --bg-soft:      #F8F9FF;
+  --bg-soft:      #F8FAFF;
   --surface:      #FFFFFF;
 
   /* Text */
-  --ink:          #0A0A1A;
-  --ink-soft:     #6B7280;
-  --ink-faint:    #9CA3AF;
+  --ink:          #0F172A;
+  --ink-soft:     #64748B;
+  --ink-faint:    #94A3B8;
 
   /* Borders */
-  --line:         rgba(10, 10, 26, 0.09);
-  --line2:        #D4D4E4;
+  --line:         rgba(15, 23, 42, 0.09);
+  --line2:        #CBD5E1;
 
   /* Feedback */
   --success:      #22C55E;
   --error:        #EF4444;
 
   /* Dark section (LeadJourney, Contact, Footer) */
-  --dark-bg:      #080C1C;
-  --dark-surface: #0E1440;
-  --dark-line:    rgba(129, 140, 248, 0.14);
+  --dark-bg:      #0A0F1E;
+  --dark-surface: #0D1830;
+  --dark-line:    rgba(96, 165, 250, 0.14);
   --dark-ink:     rgba(255, 255, 255, 0.92);
   --dark-muted:   rgba(255, 255, 255, 0.55);
 
@@ -151,7 +152,7 @@ ul, ol { list-style: none; }
 }
 .btn--primary:hover {
   background: var(--accent-deep);
-  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.32);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
   transform: translateY(-2px);
 }
 

@@ -19,42 +19,16 @@ useHead({
 </script>
 
 <template>
-  <div>
-    <SiteHeader />
-    <main>
-      <!-- 1. Hero — dark, centered, inline form -->
-      <HeroSection />
-
-      <!-- 2. Why it matters — scroll-driven sticky proof (Timur's design) -->
-      <ProofSection />
-
-      <!-- 3. How the system works — GSAP filmstrip (Kolya's) -->
-      <LeadJourney />
-
-      <!-- 4. Cases — vertical scroll-driven sticky (redesigned) -->
-      <CasesSection />
-
-      <!-- 5. Pricing — 3 plans, Директ ведение in every plan -->
-      <PricingSection />
-
-      <!-- 6. Process — 2-col timeline (Timur's layout + Kolya's text) -->
-      <ProcessSection />
-
-      <!-- 7. Founders — Тимур + Коля -->
-      <FoundersSection />
-
-      <!-- 8. FAQ -->
-      <FaqSection />
-
-      <!-- 9. Contact form — dark section with brief chips -->
-      <ContactSection />
-    </main>
-    <SiteFooter />
-
-    <!-- Non-intrusive right-side popup (appears after scrolling past pricing) -->
-    <LeadPopup />
-
-    <!-- Floating lead notifications (Kolya's) -->
-    <LeadRain />
-  </div>
+  <main>
+    <HeroSection />
+    <ProofSection />
+    <LeadJourney />
+    <CasesSection id="cases" />
+    <PricingSection id="pricing" />
+    <FoundersSection />
+    <FaqSection />
+    <ContactSection />
+  </main>
+  <LeadPopup />
+  <LeadRain />
 </template>

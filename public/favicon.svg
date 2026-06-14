@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="VeloxLab favicon">
+  <defs>
+    <linearGradient id="fg" x1="16" y1="28" x2="16" y2="3" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#1E40AF"/>
+      <stop offset="45%"  stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 28L1 3h7.5l5.5 16ZM16 28L31 3h-7.5L18 19Z" fill="url(#fg)"/>
+</svg>

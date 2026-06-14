@@ -1,58 +1,73 @@
 <script setup lang="ts">
 const CASES = [
   {
-    num:    '01',
-    tag:    'Автосервис · Москва',
-    title:  'Рост заявок в 4.3× за первый месяц',
-    result: 'С 12 до 52 заявок в месяц',
-    budget: '35 000 ₽/мес',
-    lead:   '673 ₽',
-    cr:     '5.1%',
-    duration: '10 дней → запуск',
-    body:   'Автосервис работал только "сарафаном". Сделали посадочную страницу с онлайн-записью и настроили Директ на запросы по конкретным услугам и марками. За первый месяц — 52 заявки против 12 с органики.',
-    accent: '#4F46E5',
-    label:  'Сайт + Директ',
+    num:         '01',
+    tag:         'Автосервис',
+    city:        'Москва',
+    service:     'Сайт + Директ',
+    title:       'Рост заявок в 4.3× за первый месяц',
+    metric:      '4.3×',
+    metricLabel: 'рост заявок',
+    problem:     'Работали только через сарафанное радио. Сайта не было — клиенты уходили к конкурентам.',
+    solution:    'Конверсионный лендинг с онлайн-записью + Директ по запросам конкретных услуг и марок автомобилей.',
+    result:      '52 заявки в месяц против 12 с органики. Стоимость заявки — 673 ₽. KPI выполнен на 130%.',
+    accent:      '#4F46E5',
+    bars:        [18, 24, 35, 44, 62, 80, 92, 100],
   },
   {
-    num:    '02',
-    tag:    'Стоматология · Тула',
-    title:  'Снизили стоимость пациента с 4 200 до 910 ₽',
-    result: 'Экономия 78% на привлечении',
-    budget: '60 000 ₽/мес',
-    lead:   '910 ₽',
-    cr:     '4.7%',
-    duration: '10 дней → запуск',
-    body:   'Клиника вела Директ самостоятельно через агентство по 14% комиссии, заявки выходили по 4 200 ₽. Перенастроили структуру кампаний, внедрили минус-слова и конверсионный лендинг. Стоимость пациента упала в 4.6×.',
-    accent: '#7C3AED',
-    label:  'Сайт + Директ',
+    num:         '02',
+    tag:         'Стоматология',
+    city:        'Тула',
+    service:     'Сайт + Директ',
+    title:       'Стоимость пациента снизилась с 4 200 до 910 ₽',
+    metric:      '−78%',
+    metricLabel: 'стоимость заявки',
+    problem:     'Директ вёл подрядчик по 14% комиссии. Заявки выходили по 4 200 ₽ — невыгодно для клиники.',
+    solution:    'Перестроили структуру кампаний, внедрили минус-слова и новый конверсионный лендинг.',
+    result:      'Стоимость пациента упала в 4.6×. Экономия на привлечении — 78%. Выход на окупаемость за 5 дней.',
+    accent:      '#0891B2',
+    bars:        [100, 88, 72, 55, 42, 32, 24, 21],
   },
   {
-    num:    '03',
-    tag:    'Юридическая фирма · Краснодар',
-    title:  'Поток заявок без холодных звонков',
-    result: '28 горячих обращений в месяц',
-    budget: '45 000 ₽/мес',
-    lead:   '1 607 ₽',
-    cr:     '3.8%',
-    duration: '10 дней → запуск',
-    body:   'Адвокатское бюро полностью строилось на рекомендациях. Запустили сайт с акцентом на конкретные категории дел + Директ по семантике "нужен адвокат + город". Получают 28 входящих обращений ежемесячно.',
-    accent: '#0891B2',
-    label:  'Полная система',
+    num:         '03',
+    tag:         'Юридическая фирма',
+    city:        'Краснодар',
+    service:     'Полная система',
+    title:       'Поток горячих заявок без холодных звонков',
+    metric:      '28',
+    metricLabel: 'заявок в месяц',
+    problem:     'Адвокатское бюро строилось только на рекомендациях. Нет предсказуемого потока входящих клиентов.',
+    solution:    'Сайт с фокусом на конкретные категории дел + Директ по семантике «нужен адвокат + город».',
+    result:      '28 горячих обращений ежемесячно. Стоимость — 1 607 ₽/заявка. Без единого холодного звонка.',
+    accent:      '#7C3AED',
+    bars:        [0, 12, 22, 25, 28, 29, 30, 28],
   },
 ]
 
-const root     = ref<HTMLElement | null>(null)
-const active   = ref(0)
+const cardsRoot  = ref<HTMLElement | null>(null)
+const progress   = ref(0)
+
+const active = computed(() =>
+  Math.min(CASES.length - 1, Math.floor(progress.value * CASES.length))
+)
 
 function onScroll() {
-  if (!root.value) return
-  const { top, height } = root.value.getBoundingClientRect()
-  const vh = window.innerHeight
-  const scrolled = -top
-  const total = height - vh
-  if (scrolled <= 0) { active.value = 0; return }
-  if (scrolled >= total) { active.value = CASES.length - 1; return }
-  active.value = Math.min(Math.floor(scrolled / (total / CASES.length)), CASES.length - 1)
+  const el = cardsRoot.value
+  if (!el) return
+  const { top, height } = el.getBoundingClientRect()
+  const scrollable = height - window.innerHeight
+  const scrolled   = -top
+  if (scrolled <= 0) { progress.value = 0; return }
+  if (scrolled >= scrollable) { progress.value = 1; return }
+  progress.value = scrolled / scrollable
+}
+
+function cardY(i: number) {
+  if (i === 0) return 0
+  const phase = progress.value * CASES.length
+  if (phase < i) return 100
+  const t = Math.min(1, phase - i)
+  return Math.round(100 * (1 - t) * 100) / 100
 }
 
 onMounted(() => {
@@ -67,369 +82,324 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="root" class="cases" id="cases">
-    <div class="cases__sticky">
-      <div class="container cases__inner">
+  <section class="cases" id="cases">
 
-        <!-- Left: case text -->
-        <div class="cases__text">
-          <div class="cases__header">
-            <span class="section-tag">Кейсы</span>
-            <div class="cases__counter">
-              {{ active + 1 }} / {{ CASES.length }}
-            </div>
-          </div>
-
-          <div class="cases__scenes" style="position:relative;min-height:360px">
-            <TransitionGroup name="case-slide" tag="div">
-              <div
-                v-for="(c, i) in CASES"
-                v-show="active === i"
-                :key="i"
-                class="cases__scene"
-              >
-                <div class="cases__tag-row">
-                  <span class="cases__num">{{ c.num }}</span>
-                  <span class="cases__industry">{{ c.tag }}</span>
-                  <span class="cases__label">{{ c.label }}</span>
-                </div>
-
-                <h2 class="cases__title">{{ c.title }}</h2>
-                <p class="cases__result">{{ c.result }}</p>
-                <p class="cases__body">{{ c.body }}</p>
-              </div>
-            </TransitionGroup>
-          </div>
-
-          <!-- Step nav -->
-          <div class="cases__nav">
-            <button
-              v-for="(c, i) in CASES"
-              :key="i"
-              class="cases__nav-btn"
-              :class="{ 'is-active': active === i }"
-              @click="() => {
-                if (!root) return;
-                const vh = window.innerHeight;
-                const total = root.offsetHeight - vh;
-                const target = window.scrollY + root.getBoundingClientRect().top + (i / CASES.length) * total + 1;
-                window.scrollTo({ top: target, behavior: 'smooth' });
-              }"
-            >
-              <span class="cases__nav-dot" />
-              {{ c.tag.split('·')[0].trim() }}
-            </button>
-          </div>
+    <!-- Section header (scrolls away naturally) -->
+    <div class="cases__head">
+      <div class="container">
+        <span class="section-tag cases__section-tag">Избранные кейсы</span>
+        <div class="cases__head-row">
+          <h2 class="section-title cases__title">Результаты в цифрах</h2>
+          <span class="cases__counter">
+            {{ String(active + 1).padStart(2, '0') }} / {{ String(CASES.length).padStart(2, '0') }}
+          </span>
         </div>
-
-        <!-- Right: metrics card -->
-        <div class="cases__card-wrap">
-          <Transition name="card-fade" mode="out-in">
-            <div :key="active" class="cases__card">
-              <div class="cases__card-top">
-                <span class="cases__card-tag">{{ CASES[active].tag }}</span>
-              </div>
-
-              <div class="cases__metrics">
-                <div class="cases__metric">
-                  <span class="cases__metric-val">{{ CASES[active].lead }}</span>
-                  <span class="cases__metric-lbl">Стоимость заявки</span>
-                </div>
-                <div class="cases__metric">
-                  <span class="cases__metric-val">{{ CASES[active].cr }}</span>
-                  <span class="cases__metric-lbl">Конверсия сайта</span>
-                </div>
-                <div class="cases__metric">
-                  <span class="cases__metric-val">{{ CASES[active].budget }}</span>
-                  <span class="cases__metric-lbl">Бюджет Директ</span>
-                </div>
-                <div class="cases__metric">
-                  <span class="cases__metric-val">10 дн</span>
-                  <span class="cases__metric-lbl">До запуска</span>
-                </div>
-              </div>
-
-              <!-- Mini bar chart — relative values -->
-              <div class="cases__chart">
-                <div class="cases__chart-label">Динамика заявок</div>
-                <div class="cases__bars">
-                  <div
-                    v-for="(h, bi) in [18, 28, 44, 62, 78, 88, 96, 100]"
-                    :key="bi"
-                    class="cases__bar"
-                    :style="{ height: h + '%', background: `linear-gradient(to top, ${CASES[active].accent}, ${CASES[active].accent}99)` }"
-                  />
-                </div>
-                <div class="cases__chart-footer">
-                  <span>Месяц 1</span>
-                  <span>Месяц 8</span>
-                </div>
-              </div>
-
-              <div class="cases__badge">
-                <span>{{ CASES[active].duration }}</span>
-              </div>
-            </div>
-          </Transition>
-        </div>
-
       </div>
     </div>
+
+    <!-- Scroll-driven cards stack -->
+    <div
+      ref="cardsRoot"
+      class="cases__scroll"
+      :style="{ height: `calc(100vh * ${CASES.length + 1})` }"
+    >
+      <div class="cases__viewport">
+        <div
+          v-for="(c, i) in CASES"
+          :key="c.num"
+          class="cases__card"
+          :style="{ transform: `translateY(${cardY(i)}%)`, zIndex: i + 1 }"
+        >
+          <div class="container cases__card-inner">
+
+            <!-- Top row: meta + metric -->
+            <div class="cases__card-top">
+              <div class="cases__card-meta">
+                <div class="cases__tags-row">
+                  <span class="cases__tag-badge">{{ c.tag }}</span>
+                  <span class="cases__city-badge">{{ c.city }}</span>
+                  <span class="cases__service-badge">{{ c.service }}</span>
+                </div>
+                <h3 class="cases__card-title">{{ c.title }}</h3>
+                <div class="cases__underline" :style="{ background: c.accent }" />
+              </div>
+              <div class="cases__big-metric">
+                <span class="cases__big-val" :style="{ color: c.accent }">{{ c.metric }}</span>
+                <span class="cases__big-lbl">{{ c.metricLabel }}</span>
+              </div>
+            </div>
+
+            <!-- Visual: bar chart mock -->
+            <div class="cases__visual">
+              <div class="cases__vis-top">
+                <span class="cases__vis-label">Динамика заявок</span>
+                <span class="cases__vis-live">● Live</span>
+              </div>
+              <div class="cases__bars">
+                <div
+                  v-for="(h, bi) in c.bars"
+                  :key="bi"
+                  class="cases__bar"
+                  :style="{ height: h + '%', background: `linear-gradient(to top, ${c.accent}, ${c.accent}88)` }"
+                />
+              </div>
+              <div class="cases__vis-footer">
+                <span>Месяц 1</span>
+                <span>{{ c.num === '01' ? '×4.3 к 8-му месяцу' : c.num === '02' ? '−78% стоимость лида' : '28 заявок/мес' }}</span>
+              </div>
+            </div>
+
+            <!-- Bottom: 3-col ПРОБЛЕМА / РЕШЕНИЕ / РЕЗУЛЬТАТ -->
+            <div class="cases__cols">
+              <div class="cases__col">
+                <div class="cases__col-head">Проблема</div>
+                <p class="cases__col-text">{{ c.problem }}</p>
+              </div>
+              <div class="cases__col">
+                <div class="cases__col-head">Решение</div>
+                <p class="cases__col-text">{{ c.solution }}</p>
+              </div>
+              <div class="cases__col">
+                <div class="cases__col-head">Результат</div>
+                <p class="cases__col-text">{{ c.result }}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 </template>
 
 <style scoped>
 .cases {
-  height: 300vh;
-  position: relative;
-  background: var(--bg);
-}
-.cases__sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid var(--line);
-  overflow: hidden;
+  background: #0A0C14;
+  color: #F4F4F5;
 }
 
-.cases__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 72px;
-  align-items: center;
+/* Section header */
+.cases__head {
+  padding: 80px 0 48px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
+.cases__section-tag { color: rgba(255, 255, 255, 0.45); }
+.cases__section-tag::before { background: rgba(255, 255, 255, 0.45); }
 
-/* Left */
-.cases__header {
+.cases__head-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 36px;
+  gap: 24px;
+  margin-top: 14px;
+}
+.cases__title {
+  color: #F4F4F5;
+  margin-bottom: 0;
 }
 .cases__counter {
   font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
-  color: var(--ink-faint);
-}
-
-.cases__scene {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: absolute;
-  width: 100%;
-}
-.cases__tag-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.cases__num {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-}
-.cases__industry {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-soft);
-}
-.cases__label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--accent-deep);
-  padding: 3px 9px;
-  border-radius: 100px;
-  background: var(--accent-soft);
-}
-
-.cases__title {
-  font-family: var(--font-head);
-  font-size: clamp(22px, 2.5vw, 34px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  margin-bottom: 10px;
-  line-height: 1.2;
-}
-.cases__result {
-  font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 18px;
-}
-.cases__body {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink-soft);
-  max-width: 480px;
-}
-
-/* Nav */
-.cases__nav {
-  display: flex;
-  gap: 8px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-.cases__nav-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-family: var(--font-head);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ink-faint);
-  padding: 7px 14px;
-  border-radius: 100px;
-  border: 1.5px solid transparent;
-  background: transparent;
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.cases__nav-btn:hover { color: var(--accent); border-color: var(--accent); }
-.cases__nav-btn.is-active {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-.cases__nav-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: currentColor;
+  color: rgba(255, 255, 255, 0.3);
   flex-shrink: 0;
 }
 
-/* Right: metrics card */
-.cases__card-wrap { display: flex; align-items: center; }
+/* Scroll area */
+.cases__scroll {
+  position: relative;
+}
+
+/* Sticky viewport */
+.cases__viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Individual cards */
 .cases__card {
+  position: absolute;
+  inset: 0;
+  background: #0A0C14;
+  display: flex;
+  align-items: stretch;
+  will-change: transform;
+  transition: none;
+}
+.cases__card-inner {
   width: 100%;
-  border-radius: var(--radius-xl);
-  border: 1.5px solid var(--line);
-  background: var(--bg-soft);
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding-top: 40px;
+  padding-bottom: 32px;
   gap: 24px;
 }
 
-.cases__card-top { display: flex; }
-.cases__card-tag {
+/* Top row */
+.cases__card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+.cases__card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+.cases__tags-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.cases__tag-badge,
+.cases__city-badge,
+.cases__service-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+}
+.cases__card-title {
+  font-family: var(--font-head);
+  font-size: clamp(22px, 2.8vw, 38px);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #F4F4F5;
+}
+.cases__underline {
+  height: 3px;
+  width: 80px;
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+/* Big metric */
+.cases__big-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+  text-align: right;
+}
+.cases__big-val {
+  font-family: var(--font-head);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.cases__big-lbl {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Visual / bar chart */
+.cases__visual {
+  flex: 1;
+  min-height: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+.cases__vis-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cases__vis-label {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  padding: 4px 10px;
-  background: var(--bg);
-  border: 1px solid var(--line2);
-  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.35);
 }
-
-.cases__metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.cases__metric {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 14px 16px;
-  background: var(--bg);
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-}
-.cases__metric-val {
-  font-family: var(--font-head);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--accent);
-}
-.cases__metric-lbl {
-  font-size: 12px;
-  color: var(--ink-soft);
-  font-weight: 600;
-}
-
-/* Chart */
-.cases__chart {
-  background: var(--bg);
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  padding: 16px;
-}
-.cases__chart-label {
+.cases__vis-live {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  margin-bottom: 12px;
+  color: #22C55E;
 }
 .cases__bars {
+  flex: 1;
   display: flex;
   align-items: flex-end;
-  gap: 6px;
-  height: 72px;
+  gap: 8px;
 }
 .cases__bar {
   flex: 1;
   border-radius: 4px 4px 0 0;
-  transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-height: 4px;
 }
-.cases__chart-footer {
+.cases__vis-footer {
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
-  font-size: 11px;
-  color: var(--ink-faint);
-}
-
-.cases__badge {
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  background: var(--accent-soft);
-  border-radius: var(--radius);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+/* 3-col bottom */
+.cases__cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.cases__col {
+  padding: 20px 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+.cases__col:last-child { border-right: none; }
+.cases__col-head {
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 700;
-  color: var(--accent-deep);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 10px;
+}
+.cases__col-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
 }
 
-/* Transitions */
-.case-slide-enter-active, .case-slide-leave-active {
-  transition: opacity 0.28s ease, transform 0.28s ease;
-  position: absolute; width: 100%;
-}
-.case-slide-enter-from { opacity: 0; transform: translateY(20px); }
-.case-slide-leave-to   { opacity: 0; transform: translateY(-20px); }
-
-.card-fade-enter-active, .card-fade-leave-active { transition: opacity 0.3s ease, transform 0.3s ease; }
-.card-fade-enter-from { opacity: 0; transform: translateY(12px); }
-.card-fade-leave-to   { opacity: 0; transform: translateY(-12px); }
-
-@media (max-width: 900px) {
-  .cases { height: auto; }
-  .cases__sticky { position: relative; height: auto; padding: 72px 0; }
-  .cases__inner  { grid-template-columns: 1fr; gap: 48px; }
-  .cases__card-wrap { order: -1; }
-  .cases__scene { position: relative; }
+@media (max-width: 760px) {
+  .cases__card-top { flex-direction: column; gap: 16px; }
+  .cases__big-metric { align-items: flex-start; text-align: left; }
+  .cases__cols { grid-template-columns: 1fr; }
+  .cases__col { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
+  .cases__col:last-child { border-bottom: none; }
+  .cases__card-title { font-size: 22px; }
+  .cases__big-val { font-size: 40px; }
 }
 </style>

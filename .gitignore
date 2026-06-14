@@ -1,0 +1,34 @@
+﻿# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Внутренняя документация и локальная конфигурация (не публикуется)
+docs/
+.claude/
+.claude.*
+CLAUDE.md
+*.md
+
+# in-app контент (/docs) — публикуется; markdown-гайды не должны попадать под *.md
+!content/**
